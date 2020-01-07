@@ -2,12 +2,12 @@ import 'package:dartin/dartin.dart';
 import 'package:dio/dio.dart';
 import 'package:driver_app/data/repository.dart';
 import 'package:driver_app/utils/shared_preferences_utils.dart';
-import 'package:driver_app/view/hone/home_provider.dart';
+import 'package:driver_app/view/login/login_provider.dart';
 
 const testScope = DartInScope('test');
 
 final viewModelModule = Module([
-  factory<HomeProvider>(({params}) => HomeProvider(params.get(0), get())),
+  factory<LoginProvider>(({params}) => LoginProvider(params.get(0), get())),
 ])
   ..addOthers(testScope, [
     ///other scope

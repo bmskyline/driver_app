@@ -1,4 +1,4 @@
-import 'package:driver_app/view/hone/home_page.dart';
+import 'package:driver_app/view/login/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,11 +16,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomePage('Flutter Demo Home Page'),
+      home: LoginPage('Login'),
     );
   }
 }

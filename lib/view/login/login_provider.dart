@@ -5,7 +5,7 @@ import 'package:driver_app/base/base.dart';
 import 'package:driver_app/data/repository.dart';
 import 'package:rxdart/rxdart.dart';
 
-class HomeProvider extends BaseProvide {
+class LoginProvider extends BaseProvide {
 
   final GithubRepo _repo;
   String userName = "";
@@ -35,7 +35,7 @@ class HomeProvider extends BaseProvide {
     notifyListeners();
   }
 
-  HomeProvider(this.title, this._repo);
+  LoginProvider(this.title, this._repo);
 
   Observable login() => _repo
       .login(userName, password)
