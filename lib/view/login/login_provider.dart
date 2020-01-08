@@ -5,7 +5,7 @@ import 'package:driver_app/base/base.dart';
 import 'package:driver_app/data/repository.dart';
 import 'package:rxdart/rxdart.dart';
 
-class LoginProvider extends BaseProvide {
+class LoginProvider extends BaseProvider {
 
   final GithubRepo _repo;
   String userName = "";

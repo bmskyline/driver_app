@@ -1,4 +1,6 @@
 import 'package:driver_app/base/base.dart';
+import 'package:driver_app/di/app_module.dart';
+import 'package:driver_app/utils/shared_preferences_utils.dart';
 import 'package:driver_app/utils/toast_utils.dart';
 import 'package:driver_app/utils/widget_utils.dart';
 import 'package:driver_app/view/home/home_page.dart';
@@ -34,7 +36,6 @@ class _LoginContentState extends State<_LoginContentPage>
     implements Presenter {
 
   LoginProvider mProvider;
-
   AnimationController _controller;
   Animation<double> _animation;
 
@@ -43,6 +44,7 @@ class _LoginContentState extends State<_LoginContentPage>
   @override
   void initState() {
     super.initState();
+
     mProvider = widget.provider;
     _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
     _animation = Tween(begin: 295.0, end: 48.0).animate(_controller)
@@ -65,7 +67,7 @@ class _LoginContentState extends State<_LoginContentPage>
   }
 
   void login() {
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => HomePage()),
     );
@@ -86,7 +88,7 @@ class _LoginContentState extends State<_LoginContentPage>
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: Scaffold(
+    child: Scaffold(
         appBar: AppBar(
           title: Text(mProvider.title),
         ),

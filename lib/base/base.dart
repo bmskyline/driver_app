@@ -17,7 +17,7 @@ abstract class ItemPresenter<T> {
   void onItemClick(String action, T item);
 }
 
-class BaseProvide with ChangeNotifier {
+class BaseProvider with ChangeNotifier {
 
   CompositeSubscription compositeSubscription = CompositeSubscription();
 
