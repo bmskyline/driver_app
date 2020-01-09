@@ -8,12 +8,12 @@ import 'di/app_module.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await init();
-  Provider.debugCheckInvalidValueType = null;
-  Widget _defaultHome = LoginPage("Login");
-  if(spUtil.getString("TOKEN") != null && spUtil.getString("TOKEN") != "") {
-    _defaultHome = HomePage();
-  }
-  runApp(MyApp(_defaultHome));
+Provider.debugCheckInvalidValueType = null;
+Widget _defaultHome = LoginPage("Login");
+if(spUtil.getString("TOKEN") != null && spUtil.getString("TOKEN") != "") {
+_defaultHome = HomePage();
+}
+runApp(MyApp(_defaultHome));
 }
 
 class MyApp extends StatelessWidget {
@@ -24,12 +24,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: defaultHome
+        debugShowCheckedModeBanner: false,
+        title: 'Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: defaultHome
     );
   }
 }

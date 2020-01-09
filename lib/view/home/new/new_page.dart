@@ -1,35 +1,45 @@
+import 'dart:convert';
+
 import 'package:driver_app/base/base.dart';
+import 'package:driver_app/data/model/user_model.dart';
 import 'package:driver_app/utils/toast_utils.dart';
 import 'package:driver_app/utils/widget_utils.dart';
 import 'package:driver_app/view/detail/detail_page.dart';
+import 'package:driver_app/view/home/home_page.dart';
 import 'package:driver_app/view/home/new/new_provider.dart';
 import 'package:flutter/material.dart';
 import '../order_model.dart';
 
 class NewPage extends PageProvideNode<NewProvider> {
+  final BuildContext homeContext;
+  NewPage(this.homeContext);
 
   @override
   Widget buildContent(BuildContext context) {
-    return _NewContentPage(mProvider);
+    return _NewContentPage(mProvider, homeContext);
   }
 }
 
 class _NewContentPage extends StatefulWidget {
   final NewProvider provider;
-
-  _NewContentPage(this.provider);
+  final BuildContext homeContext;
+  _NewContentPage(this.provider, this.homeContext);
 
   @override
   State<StatefulWidget> createState() {
-    return _NewContentState();
+    return _NewContentState(homeContext);
   }
 }
 
 class _NewContentState extends State<_NewContentPage>
       with TickerProviderStateMixin<_NewContentPage>
       implements Presenter{
+  BuildContext homeContext;
+
+  _NewContentState(this.homeContext);
 
   NewProvider mProvider;
+  List<User> users = new List();
 
   @override
   void initState() {
@@ -39,7 +49,9 @@ class _NewContentState extends State<_NewContentPage>
     }).doOnDone(() {
     }).listen((data) {
       //success
-      print("cai lgi "+ data.list.length.toString());
+       setState(() {
+         users.addAll((data as List).map((user) => User.fromJson(user)).toList());
+       });
     }, onError: (e) {
       //error
       dispatchFailure(context, e);
@@ -49,16 +61,6 @@ class _NewContentState extends State<_NewContentPage>
 
   @override
   Widget build(BuildContext context) {
-    List<Order> order = new List();
-    order.add(Order("1", "196, New, NDC", "Clother", "0999999999","14:00"));
-    order.add(Order("2", "196, New, NDC", "Computer", "0999799989","17:28"));
-    order.add(Order("3", "196, New, NDC", "Glass", "0999999999","07:26"));
-    order.add(Order("4", "196, New, NDC", "Phone", "0993929992","14:26"));
-    order.add(Order("5", "196, New, NDC", "Shoes", "0999999999","19:33"));
-    order.add(Order("6", "196, New, NDC", "Domain", "0999956999","14:26"));
-    order.add(Order("7", "196, New, NDC", "Building materials", "0999999999","14:51"));
-    order.add(Order("8", "196, New, NDC", "Helmet", "0993299659","14:50"));
-    order.add(Order("9", "196, New, NDC", "Flower", "0999922999","14:00"));
 
     return Scaffold(
       appBar: AppBar(
@@ -68,7 +70,7 @@ class _NewContentState extends State<_NewContentPage>
       backgroundColor: Colors.black12,
       body: SizedBox.expand(
         child: ListView.builder(
-          itemCount: order.length,
+          itemCount: users.length,
           itemBuilder: (BuildContext context, int index) {
             return SizedBox(
               child: Card(
@@ -76,17 +78,16 @@ class _NewContentState extends State<_NewContentPage>
                 child: InkWell(
                   onTap: () {
                     Navigator.push(
-                      context,
+                      homeContext,
                       MaterialPageRoute(
-                        builder: (context) => DetailPage(order: order[index]),
+                        builder: (context) => DetailPage(user: users[index]),
                       ),
                     );
                   },
                   child: Column(
                       children: <Widget> [
-                        Text(order[index].id, style: Theme.of(context).primaryTextTheme.body1),
-                        Text(order[index].name, style: Theme.of(context).primaryTextTheme.body1),
-                        Text(order[index].address, style: Theme.of(context).primaryTextTheme.body1),
+                        Text(users[index].id.toString(), style: Theme.of(context).primaryTextTheme.body1),
+                        Text(users[index].title, style: Theme.of(context).primaryTextTheme.body1),
                       ]
                   ),
                 ),

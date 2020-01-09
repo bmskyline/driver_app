@@ -1,7 +1,4 @@
 import 'package:driver_app/base/base.dart';
-import 'package:driver_app/di/app_module.dart';
-import 'package:driver_app/utils/shared_preferences_utils.dart';
-import 'package:driver_app/utils/toast_utils.dart';
 import 'package:driver_app/utils/widget_utils.dart';
 import 'package:driver_app/view/home/home_page.dart';
 import 'package:flutter/cupertino.dart';

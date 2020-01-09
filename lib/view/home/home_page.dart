@@ -1,3 +1,4 @@
+import 'package:driver_app/data/model/user_model.dart';
 import 'package:driver_app/view/detail/detail_page.dart';
 import 'package:driver_app/view/home/cancel/cancel_page.dart';
 import 'package:driver_app/view/home/new/new_page.dart';
@@ -29,16 +30,22 @@ class ViewNavigatorObserver extends NavigatorObserver {
 }
 
 class DestinationView extends StatefulWidget {
-  const DestinationView({ Key key, this.destination, this.onNavigation }) : super(key: key);
+  final BuildContext homeContext;
+  const DestinationView(this.homeContext, { Key key, this.destination, this.onNavigation }) : super(key: key);
 
   final Destination destination;
   final VoidCallback onNavigation;
 
   @override
-  _DestinationViewState createState() => _DestinationViewState();
+  _DestinationViewState createState() => _DestinationViewState(homeContext);
 }
 
 class _DestinationViewState extends State<DestinationView> {
+  BuildContext homeContext;
+
+
+  _DestinationViewState(this.homeContext);
+
   @override
   Widget build(BuildContext context) {
     return Navigator(
@@ -50,11 +57,11 @@ class _DestinationViewState extends State<DestinationView> {
           settings: settings,
           builder: (BuildContext context) {
             if(widget.destination.index == 0) {
-              return NewPage();
+              return NewPage(homeContext);
             } else if (widget.destination.index == 1){
-              return SuccessPage();
+              return SuccessPage(homeContext);
             } else {
-              return CancelPage();
+              return CancelPage(homeContext);
             }
           },
         );
@@ -73,12 +80,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin<HomeP
   List<AnimationController> _faders;
   AnimationController _hide;
   int _currentIndex = 0;
-  /*final List<Widget> viewContainer = [
-    NewPage(),
-    SuccessPage(),
-    CancelPage()
-  ];*/
-
   @override
   void initState() {
     super.initState();
@@ -132,7 +133,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin<HomeP
                 opacity: _faders[destination.index].drive(CurveTween(curve: Curves.fastOutSlowIn)),
                 child: KeyedSubtree(
                   key: _destinationKeys[destination.index],
-                  child: DestinationView(
+                  child: DestinationView(context,
                     destination: destination,
                     onNavigation: () {
                       _hide.forward();

@@ -1,14 +1,12 @@
 import 'dart:convert';
-
 import 'package:driver_app/data/model/user_model.dart';
-import 'package:driver_app/data/model/user_response.dart';
 import 'package:driver_app/utils/network_utils.dart';
 import 'package:driver_app/utils/shared_preferences_utils.dart';
 import 'package:rxdart/rxdart.dart';
 
 class GithubService {
   Observable login() => get("user");
-  Observable<UserResponse> getUsers() => get("users");
+  Observable getUsers() => get("albums");
 }
 
 class GithubRepo {
@@ -24,7 +22,7 @@ class GithubRepo {
     return _remote.login();
   }
 
-  Observable<UserResponse> getUsers() {
+  Observable getUsers() {
     return _remote.getUsers();
   }
 }

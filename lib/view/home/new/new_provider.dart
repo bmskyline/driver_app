@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:driver_app/base/base.dart';
 import 'package:driver_app/data/model/user_model.dart';
-import 'package:driver_app/data/model/user_response.dart';
 import 'package:driver_app/data/repository.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -9,12 +8,12 @@ class NewProvider extends BaseProvider {
 
   final GithubRepo _repo;
   bool _loading = false;
-  List<User> _response;
+  String _response;
 
   NewProvider(this._repo);
 
-  List<User> get response => _response;
-  set response(List<User> response) {
+  String get response => _response;
+  set response(String response) {
     _response = response;
     notifyListeners();
   }
@@ -25,9 +24,9 @@ class NewProvider extends BaseProvider {
     notifyListeners();
   }
 
-  Observable<UserResponse> getUsers() => _repo
+  Observable getUsers() => _repo
       .getUsers()
-      .doOnData((r) => response = r.list)
+      .doOnData((r) => response = r.toString())
       .doOnError((e, stacktrace) {
         if (e is DioError) {
           response = null;
