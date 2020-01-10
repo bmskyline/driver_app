@@ -27,6 +27,7 @@ class LoginProvider extends BaseProvider {
 
   set validateUserName(bool value) {
     _validateUserName = value;
+    notifyListeners();
   }
 
   String get response => _response;
@@ -58,5 +59,6 @@ class LoginProvider extends BaseProvider {
 
   set validatePassword(bool value) {
     _validatePassword = value;
+    notifyListeners();
   }
 }
