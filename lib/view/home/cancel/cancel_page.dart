@@ -1,34 +1,66 @@
+import 'package:driver_app/base/base.dart';
 import 'package:driver_app/data/model/user_model.dart';
+import 'package:driver_app/utils/widget_utils.dart';
 import 'package:driver_app/view/detail/detail_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class CancelPage extends StatefulWidget {
+import 'cancel_provider.dart';
+
+class CancelPage extends PageProvideNode<CancelProvider> {
   final BuildContext homeContext;
-  CancelPage(this.homeContext, {Key key}) : super(key: key);
+  CancelPage(this.homeContext);
 
   @override
-  _CancelStale createState() => _CancelStale(homeContext);
+  Widget buildContent(BuildContext context) {
+    return _CancelContentPage(homeContext, mProvider);
+  }
 }
 
-class _CancelStale extends State<CancelPage> {
+class _CancelContentPage extends StatefulWidget {
+  final BuildContext homeContext;
+  final CancelProvider provider;
+  _CancelContentPage(this.homeContext, this.provider);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _CancelContentState(homeContext);
+  }
+}
+
+class _CancelContentState extends State<_CancelContentPage>
+    with TickerProviderStateMixin<_CancelContentPage> {
   BuildContext homeContext;
-  _CancelStale(this.homeContext);
+
+  _CancelContentState(this.homeContext);
+
+  CancelProvider mProvider;
+  List<User> users = List();
+
+  @override
+  void initState() {
+    super.initState();
+    mProvider = widget.provider;
+    _loadData();
+  }
+
+  void _loadData() {
+    final s =
+        mProvider.getUsers().doOnListen(() {}).doOnDone(() {}).listen((data) {
+      //success
+      setState(() {
+        users
+            .addAll((data as List).map((user) => User.fromJson(user)).toList());
+      });
+    }, onError: (e) {
+      //error
+      dispatchFailure(context, e);
+    });
+    mProvider.addSubscription(s);
+  }
 
   @override
   Widget build(BuildContext context) {
-    List<User> users = new List();
-    users.add(User(9, 1, "196, Cancel, NDC"));
-    users.add(User(9, 1, "196, Cancel, NDC"));
-    users.add(User(9, 1, "196, Cancel, NDC"));
-    users.add(User(9, 1, "196, Cancel, NDC"));
-    users.add(User(9, 1, "196, Cancel, NDC"));
-    users.add(User(9, 1, "196, Cancel, NDC"));
-    users.add(User(9, 1, "196, Cancel, NDC"));
-    users.add(User(9, 1, "196, Cancel, NDC"));
-    users.add(User(9, 1, "196, Cancel, NDC"));
-    users.add(User(9, 1, "196, Cancel, NDC"));
-    users.add(User(9, 1, "196, Cancel, NDC"));
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Cancel"),
@@ -36,33 +68,56 @@ class _CancelStale extends State<CancelPage> {
       ),
       backgroundColor: Colors.black12,
       body: SizedBox.expand(
-        child: ListView.builder(
-          itemCount: users.length,
-          itemBuilder: (BuildContext context, int index) {
-            return SizedBox(
-              child: Card(
-                color: Colors.black12.withOpacity(0.25),
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      homeContext,
-                      MaterialPageRoute(
-                        builder: (context) => DetailPage(user: users[index]),
-                      ),
-                    );
-                  },
-                  child: Column(children: <Widget>[
-                    Text(users[index].id.toString(),
-                        style: Theme.of(context).primaryTextTheme.body1),
-                    Text(users[index].title,
-                        style: Theme.of(context).primaryTextTheme.body1),
-                  ]),
-                ),
-              ),
-            );
+        child: NotificationListener<ScrollNotification>(
+          onNotification: (ScrollNotification scrollInfo) {
+            if (!mProvider.loading &&
+                scrollInfo.metrics.pixels ==
+                    scrollInfo.metrics.maxScrollExtent) {
+              _loadData();
+            }
           },
+          child:
+              Stack(alignment: AlignmentDirectional.center, children: <Widget>[
+            ListView.builder(
+              itemCount: users.length,
+              itemBuilder: (BuildContext context, int index) {
+                return SizedBox(
+                  child: Card(
+                    color: Colors.blue[50].withOpacity(0.25),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          homeContext,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                DetailPage(user: users[index]),
+                          ),
+                        );
+                      },
+                      child: Column(children: <Widget>[
+                        Text(users[index].id.toString(),
+                            style: Theme.of(context).primaryTextTheme.body1),
+                        Text(users[index].title,
+                            style: Theme.of(context).primaryTextTheme.body1),
+                      ]),
+                    ),
+                  ),
+                );
+              },
+            ),
+            buildProgress()
+          ]),
         ),
       ),
     );
+  }
+
+  Consumer<CancelProvider> buildProgress() {
+    return Consumer<CancelProvider>(builder: (context, value, child) {
+      return Visibility(
+        child: CircularProgressIndicator(),
+        visible: value.loading,
+      );
+    });
   }
 }

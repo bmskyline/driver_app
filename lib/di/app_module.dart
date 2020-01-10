@@ -2,14 +2,18 @@ import 'package:dartin/dartin.dart';
 import 'package:dio/dio.dart';
 import 'package:driver_app/data/repository.dart';
 import 'package:driver_app/utils/shared_preferences_utils.dart';
+import 'package:driver_app/view/home/cancel/cancel_provider.dart';
 import 'package:driver_app/view/home/new/new_provider.dart';
+import 'package:driver_app/view/home/success/success_provider.dart';
 import 'package:driver_app/view/login/login_provider.dart';
 
 const testScope = DartInScope('test');
 
 final viewModelModule = Module([
   factory<LoginProvider>(({params}) => LoginProvider(params.get(0), get())),
-  factory<NewProvider>(({params}) => NewProvider(get()))
+  factory<NewProvider>(({params}) => NewProvider(get())),
+  factory<SuccessProvider>(({params}) => SuccessProvider(get())),
+  factory<CancelProvider>(({params}) => CancelProvider(get()))
 ])
   ..addOthers(testScope, [
     ///other scope

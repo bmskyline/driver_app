@@ -12,14 +12,14 @@ class NewPage extends PageProvideNode<NewProvider> {
 
   @override
   Widget buildContent(BuildContext context) {
-    return _NewContentPage(mProvider, homeContext);
+    return _NewContentPage(homeContext, mProvider);
   }
 }
 
 class _NewContentPage extends StatefulWidget {
-  final NewProvider provider;
   final BuildContext homeContext;
-  _NewContentPage(this.provider, this.homeContext);
+  final NewProvider provider;
+  _NewContentPage(this.homeContext, this.provider);
 
   @override
   State<StatefulWidget> createState() {
@@ -70,12 +70,10 @@ class _NewContentState extends State<_NewContentPage>
       body: SizedBox.expand(
         child: NotificationListener<ScrollNotification>(
           onNotification: (ScrollNotification scrollInfo) {
-            print("load data" + mProvider.loading.toString());
             if (!mProvider.loading &&
                 scrollInfo.metrics.pixels ==
                     scrollInfo.metrics.maxScrollExtent) {
               _loadData();
-              print("load data");
             }
           },
           child:
@@ -85,7 +83,7 @@ class _NewContentState extends State<_NewContentPage>
               itemBuilder: (BuildContext context, int index) {
                 return SizedBox(
                   child: Card(
-                    color: Colors.black12.withOpacity(0.25),
+                    color: Colors.blue[50].withOpacity(0.25),
                     child: InkWell(
                       onTap: () {
                         Navigator.push(
