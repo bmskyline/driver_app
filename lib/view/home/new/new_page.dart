@@ -115,7 +115,7 @@ class _NewContentState extends State<_NewContentPage>
   Consumer<NewProvider> buildProgress() {
     return Consumer<NewProvider>(builder: (context, value, child) {
       return Visibility(
-        child: CircularProgressIndicator(),
+        child: const CircularProgressIndicator(),
         visible: value.loading,
       );
     });

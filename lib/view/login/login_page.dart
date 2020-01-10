@@ -58,15 +58,28 @@ class _LoginContentState extends State<_LoginContentPage>
   @override
   void onClick(String action) {
     if (ACTION_LOGIN == action) {
-      login();
+      if (mProvider.userName.isNotEmpty && mProvider.password.isNotEmpty) {
+        login();
+      } else {
+        if (mProvider.userName.isEmpty) {
+          setState(() {
+            mProvider.validateUserName = true;
+          });
+        }
+        if (mProvider.password.isEmpty) {
+          setState(() {
+            mProvider.validatePassword = true;
+          });
+        }
+      }
     }
   }
 
   void login() {
-    Navigator.pushReplacement(
+    /*Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => HomePage()),
-    );
+    );*/
     final s = mProvider.login().doOnListen(() {
       _controller.forward();
     }).doOnDone(() {
@@ -102,29 +115,47 @@ class _LoginContentState extends State<_LoginContentPage>
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, right: 16.0),
                   child: TextField(
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(10.0),
-                      icon: Icon(Icons.person),
-                      labelText: 'Account',
-                    ),
-                    autofocus: false,
-                    onChanged: (str) => mProvider.userName = str,
-                  ),
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.all(10.0),
+                        icon: Icon(Icons.person),
+                        labelText: 'Account',
+                        errorText: mProvider.validateUserName
+                            ? 'Value Can\'t Be Empty'
+                            : null,
+                      ),
+                      autofocus: false,
+                      onChanged: (str) {
+                        mProvider.userName = str;
+                        setState(() {
+                          str.isEmpty
+                              ? mProvider.validateUserName = true
+                              : mProvider.validateUserName = false;
+                        });
+                      }),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, right: 16.0),
                   child: TextField(
-                    obscureText: true,
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(10.0),
-                      icon: Icon(Icons.lock),
-                      labelText: 'Password',
-                    ),
-                    autofocus: false,
-                    onChanged: (str) => mProvider.password = str,
-                  ),
+                      obscureText: true,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.all(10.0),
+                        icon: Icon(Icons.lock),
+                        labelText: 'Password',
+                        errorText: mProvider.validatePassword
+                            ? 'Value Can\'t Be Empty'
+                            : null,
+                      ),
+                      autofocus: false,
+                      onChanged: (str) {
+                        mProvider.password = str;
+                        setState(() {
+                          str.isEmpty
+                              ? mProvider.validatePassword = true
+                              : mProvider.validatePassword = false;
+                        });
+                      }),
                 ),
                 const Padding(
                   padding: EdgeInsets.only(top: 30.0),
