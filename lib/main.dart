@@ -8,16 +8,15 @@ import 'di/app_module.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await init();
-Provider.debugCheckInvalidValueType = null;
-Widget _defaultHome = LoginPage("Login");
-if(spUtil.getString("TOKEN") != null && spUtil.getString("TOKEN") != "") {
-_defaultHome = HomePage();
-}
-runApp(MyApp(_defaultHome));
+  Provider.debugCheckInvalidValueType = null;
+  Widget _defaultHome = LoginPage("Login");
+  if (spUtil.getString("TOKEN") != null && spUtil.getString("TOKEN") != "") {
+    _defaultHome = HomePage();
+  }
+  runApp(MyApp(_defaultHome));
 }
 
 class MyApp extends StatelessWidget {
-
   Widget defaultHome;
   MyApp(this.defaultHome);
 
@@ -29,7 +28,6 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: defaultHome
-    );
+        home: defaultHome);
   }
 }

@@ -6,8 +6,7 @@ class User {
   User(this.id, this.userId, this.title);
 
   User.fromJson(Map<String, dynamic> json)
-    : id = json['id'],
-    userId = json["userId"],
-    title = json["title"];
-
+      : id = json['id'],
+        userId = json["userId"],
+        title = json["title"];
 }

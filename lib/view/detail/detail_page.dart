@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class DetailPage extends StatefulWidget {
-
   final User user;
-  const DetailPage({ Key key, this.user }) : super(key: key);
-
+  const DetailPage({Key key, this.user}) : super(key: key);
 
   @override
   _DetailPageState createState() => new _DetailPageState(user);
@@ -17,8 +15,7 @@ class _DetailPageState extends State<DetailPage> {
   final User user;
   _DetailPageState(this.user);
 
-
- /* @override
+  /* @override
   void initState() {
     super.initState();
   }

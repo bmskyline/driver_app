@@ -1,5 +1,4 @@
 class Order {
-
   final String id;
   final String address;
   final String name;

@@ -1,14 +1,9 @@
-import 'package:driver_app/data/model/user_model.dart';
-import 'package:driver_app/view/detail/detail_page.dart';
 import 'package:driver_app/view/home/cancel/cancel_page.dart';
 import 'package:driver_app/view/home/new/new_page.dart';
-import 'package:driver_app/view/home/order_model.dart';
 import 'package:driver_app/view/home/success/success_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'destination_model.dart';
-
-
 
 const List<Destination> allDestinations = <Destination>[
   Destination(0, 'New', Icons.fiber_new, Colors.blue),
@@ -24,6 +19,7 @@ class ViewNavigatorObserver extends NavigatorObserver {
   void didPop(Route<dynamic> route, Route<dynamic> previousRoute) {
     onNavigation();
   }
+
   void didPush(Route<dynamic> route, Route<dynamic> previousRoute) {
     onNavigation();
   }
@@ -31,7 +27,9 @@ class ViewNavigatorObserver extends NavigatorObserver {
 
 class DestinationView extends StatefulWidget {
   final BuildContext homeContext;
-  const DestinationView(this.homeContext, { Key key, this.destination, this.onNavigation }) : super(key: key);
+  const DestinationView(this.homeContext,
+      {Key key, this.destination, this.onNavigation})
+      : super(key: key);
 
   final Destination destination;
   final VoidCallback onNavigation;
@@ -42,7 +40,6 @@ class DestinationView extends StatefulWidget {
 
 class _DestinationViewState extends State<DestinationView> {
   BuildContext homeContext;
-
 
   _DestinationViewState(this.homeContext);
 
@@ -56,9 +53,9 @@ class _DestinationViewState extends State<DestinationView> {
         return MaterialPageRoute(
           settings: settings,
           builder: (BuildContext context) {
-            if(widget.destination.index == 0) {
+            if (widget.destination.index == 0) {
               return NewPage(homeContext);
-            } else if (widget.destination.index == 1){
+            } else if (widget.destination.index == 1) {
               return SuccessPage(homeContext);
             } else {
               return CancelPage(homeContext);
@@ -75,7 +72,8 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with TickerProviderStateMixin<HomePage> {
+class _HomePageState extends State<HomePage>
+    with TickerProviderStateMixin<HomePage> {
   List<Key> _destinationKeys;
   List<AnimationController> _faders;
   AnimationController _hide;
@@ -84,18 +82,21 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin<HomeP
   void initState() {
     super.initState();
 
-    _faders = allDestinations.map<AnimationController>((Destination destination) {
-      return AnimationController(vsync: this, duration: Duration(milliseconds: 200));
+    _faders =
+        allDestinations.map<AnimationController>((Destination destination) {
+      return AnimationController(
+          vsync: this, duration: Duration(milliseconds: 200));
     }).toList();
     _faders[_currentIndex].value = 1.0;
-    _destinationKeys = List<Key>.generate(allDestinations.length, (int index) => GlobalKey()).toList();
+    _destinationKeys =
+        List<Key>.generate(allDestinations.length, (int index) => GlobalKey())
+            .toList();
     _hide = AnimationController(vsync: this, duration: kThemeAnimationDuration);
   }
 
   @override
   void dispose() {
-    for (AnimationController controller in _faders)
-      controller.dispose();
+    for (AnimationController controller in _faders) controller.dispose();
     _hide.dispose();
     super.dispose();
   }
@@ -130,10 +131,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin<HomeP
             fit: StackFit.expand,
             children: allDestinations.map((Destination destination) {
               final Widget view = FadeTransition(
-                opacity: _faders[destination.index].drive(CurveTween(curve: Curves.fastOutSlowIn)),
+                opacity: _faders[destination.index]
+                    .drive(CurveTween(curve: Curves.fastOutSlowIn)),
                 child: KeyedSubtree(
                   key: _destinationKeys[destination.index],
-                  child: DestinationView(context,
+                  child: DestinationView(
+                    context,
                     destination: destination,
                     onNavigation: () {
                       _hide.forward();
@@ -170,8 +173,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin<HomeP
                 return BottomNavigationBarItem(
                     icon: Icon(destination.icon),
                     backgroundColor: destination.color,
-                    title: Text(destination.title)
-                );
+                    title: Text(destination.title));
               }).toList(),
             ),
           ),

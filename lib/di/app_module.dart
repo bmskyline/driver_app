@@ -16,7 +16,6 @@ final viewModelModule = Module([
 //  factory<HomeProvide>(({params}) => HomeProvide(params.get(0), get<GithubRepo>())),
   ]);
 
-
 final repoModule = Module([
   lazy<GithubRepo>(({params}) => GithubRepo(get(), get())),
 ]);
@@ -35,13 +34,17 @@ class AuthInterceptor extends Interceptor {
   @override
   onRequest(RequestOptions options) {
     final token = spUtil.getString("TOKEN");
-    options.headers.update("Authorization", (_) => token, ifAbsent: () => token);
+    options.headers
+        .update("Authorization", (_) => token, ifAbsent: () => token);
     return super.onRequest(options);
   }
 }
 
 final dio = Dio()
-  ..options = BaseOptions(baseUrl: 'https://jsonplaceholder.typicode.com/', connectTimeout: 30, receiveTimeout: 30)
+  ..options = BaseOptions(
+      baseUrl: 'https://jsonplaceholder.typicode.com/',
+      connectTimeout: 30,
+      receiveTimeout: 30)
   ..interceptors.add(AuthInterceptor())
   ..interceptors.add(LogInterceptor(responseBody: true, requestBody: true));
 

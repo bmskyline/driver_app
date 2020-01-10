@@ -9,18 +9,16 @@ class SpUtil {
 
   static SharedPreferences _spf;
 
-
   SpUtil._();
 
   Future _init() async {
     _spf = await SharedPreferences.getInstance();
   }
 
-  static Future<SpUtil> getInstance() async  {
+  static Future<SpUtil> getInstance() async {
     if (_instance == null) {
       _instance = new SpUtil._();
       await _instance._init();
-
     }
     return _instance;
   }
@@ -31,6 +29,7 @@ class SpUtil {
     }
     return false;
   }
+
   // 判断是否存在数据
   bool hasKey(String key) {
     Set keys = getKeys();
@@ -100,8 +99,6 @@ class SpUtil {
     if (_beforCheck()) return null;
     return _spf.get(key);
   }
-
-
 
   Future<bool> remove(String key) {
     if (_beforCheck()) return null;

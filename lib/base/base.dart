@@ -1,5 +1,3 @@
-
-
 import 'dart:async';
 
 import 'package:dartin/dartin.dart';
@@ -8,19 +6,15 @@ import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 
 abstract class Presenter {
-
   void onClick(String action);
 }
 
 abstract class ItemPresenter<T> {
-
   void onItemClick(String action, T item);
 }
 
 class BaseProvider with ChangeNotifier {
-
   CompositeSubscription compositeSubscription = CompositeSubscription();
-
 
   addSubscription(StreamSubscription subscription) {
     compositeSubscription.add(subscription);
@@ -35,10 +29,12 @@ class BaseProvider with ChangeNotifier {
   }
 }
 
-abstract class PageProvideNode<T extends ChangeNotifier> extends StatelessWidget implements Presenter {
+abstract class PageProvideNode<T extends ChangeNotifier> extends StatelessWidget
+    implements Presenter {
   final T mProvider;
 
-  PageProvideNode({List<dynamic> params}) : mProvider = inject<T>(params: params);
+  PageProvideNode({List<dynamic> params})
+      : mProvider = inject<T>(params: params);
 
   Widget buildContent(BuildContext context);
 

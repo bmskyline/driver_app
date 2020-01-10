@@ -3,12 +3,12 @@ import 'package:driver_app/base/base.dart';
 import 'package:driver_app/data/repository.dart';
 import 'package:rxdart/rxdart.dart';
 
-class NewProvider extends BaseProvider {
+class CancelProvider extends BaseProvider {
   final GithubRepo _repo;
   bool _loading = false;
   String _response;
 
-  NewProvider(this._repo);
+  CancelProvider(this._repo);
 
   String get response => _response;
   set response(String response) {

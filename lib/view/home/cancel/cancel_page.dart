@@ -4,17 +4,15 @@ import 'package:flutter/material.dart';
 
 class CancelPage extends StatefulWidget {
   final BuildContext homeContext;
-  CancelPage(this.homeContext, { Key key}) : super(key: key);
-
+  CancelPage(this.homeContext, {Key key}) : super(key: key);
 
   @override
   _CancelStale createState() => _CancelStale(homeContext);
 }
 
-class _CancelStale extends State<CancelPage>{
+class _CancelStale extends State<CancelPage> {
   BuildContext homeContext;
   _CancelStale(this.homeContext);
-
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +51,12 @@ class _CancelStale extends State<CancelPage>{
                       ),
                     );
                   },
-                  child: Column(
-                      children: <Widget> [
-                        Text(users[index].id.toString(), style: Theme.of(context).primaryTextTheme.body1),
-                        Text(users[index].title, style: Theme.of(context).primaryTextTheme.body1),
-                      ]
-                  ),
+                  child: Column(children: <Widget>[
+                    Text(users[index].id.toString(),
+                        style: Theme.of(context).primaryTextTheme.body1),
+                    Text(users[index].title,
+                        style: Theme.of(context).primaryTextTheme.body1),
+                  ]),
                 ),
               ),
             );
@@ -67,5 +65,4 @@ class _CancelStale extends State<CancelPage>{
       ),
     );
   }
-
 }

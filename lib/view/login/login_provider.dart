@@ -1,12 +1,9 @@
-
-
 import 'package:dio/dio.dart';
 import 'package:driver_app/base/base.dart';
 import 'package:driver_app/data/repository.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LoginProvider extends BaseProvider {
-
   final GithubRepo _repo;
   String userName = "";
   String password = "";
@@ -47,5 +44,4 @@ class LoginProvider extends BaseProvider {
       })
       .doOnListen(() => loading = true)
       .doOnDone(() => loading = false);
-
 }
