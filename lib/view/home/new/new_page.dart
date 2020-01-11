@@ -35,7 +35,6 @@ class _NewContentState extends State<_NewContentPage>
   _NewContentState(this.homeContext);
 
   NewProvider mProvider;
-  List<User> users = List();
 
   @override
   void initState() {
@@ -48,10 +47,6 @@ class _NewContentState extends State<_NewContentPage>
     final s =
         mProvider.getUsers().doOnListen(() {}).doOnDone(() {}).listen((data) {
       //success
-      setState(() {
-        users
-            .addAll((data as List).map((user) => User.fromJson(user)).toList());
-      });
     }, onError: (e) {
       //error
       dispatchFailure(context, e);
@@ -78,32 +73,42 @@ class _NewContentState extends State<_NewContentPage>
           },
           child:
               Stack(alignment: AlignmentDirectional.center, children: <Widget>[
-            ListView.builder(
-              itemCount: users.length,
-              itemBuilder: (BuildContext context, int index) {
-                return SizedBox(
-                  child: Card(
-                    color: Colors.blue[50].withOpacity(0.25),
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          homeContext,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                DetailPage(user: users[index]),
-                          ),
-                        );
-                      },
-                      child: Column(children: <Widget>[
-                        Text(users[index].id.toString(),
-                            style: Theme.of(context).primaryTextTheme.body1),
-                        Text(users[index].title,
-                            style: Theme.of(context).primaryTextTheme.body1),
-                      ]),
-                    ),
-                  ),
+            Consumer<NewProvider> (
+              builder: (context, value, child) {
+                return ListView.builder(
+                  itemCount: value.response.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return SizedBox(
+                      child: Card(
+                        color: Colors.blue[50].withOpacity(0.25),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              homeContext,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    DetailPage(user: value.response[index]),
+                              ),
+                            );
+                          },
+                          child: Column(children: <Widget>[
+                            Text(value.response[index].id.toString(),
+                                style: Theme
+                                    .of(context)
+                                    .primaryTextTheme
+                                    .body1),
+                            Text(value.response[index].title,
+                                style: Theme
+                                    .of(context)
+                                    .primaryTextTheme
+                                    .body1),
+                          ]),
+                        ),
+                      ),
+                    );
+                  },
                 );
-              },
+              }
             ),
             buildProgress()
           ]),
