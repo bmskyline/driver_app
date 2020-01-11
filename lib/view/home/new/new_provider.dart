@@ -25,8 +25,11 @@ class NewProvider extends BaseProvider {
 
   Observable getUsers() => _repo
       .getUsers()
-      .doOnData((r) =>
-          _response.addAll((r as List).map((user) => User.fromJson(user)).toList()))
+      .doOnData((r) {
+        print("data bao");
+          _response.addAll((r as List).map((user) => User.fromJson(user)).toList());
+          notifyListeners();
+  })
       .doOnError((e, stacktrace) {
         if (e is DioError) {
           //response = null;
