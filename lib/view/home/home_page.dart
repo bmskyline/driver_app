@@ -1,8 +1,11 @@
+import 'package:driver_app/base/base.dart';
 import 'package:driver_app/view/home/cancel/cancel_page.dart';
+import 'package:driver_app/view/home/home_provider.dart';
 import 'package:driver_app/view/home/new/new_page.dart';
 import 'package:driver_app/view/home/success/success_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:provider/provider.dart';
 import 'destination_model.dart';
 
 const List<Destination> allDestinations = <Destination>[
@@ -67,27 +70,43 @@ class _DestinationViewState extends State<DestinationView> {
   }
 }
 
-class HomePage extends StatefulWidget {
+class HomePage extends PageProvideNode<HomeProvider> {
+
   @override
-  _HomePageState createState() => _HomePageState();
+  Widget buildContent(BuildContext context) {
+    return _HomeContentPage(mProvider);
+  }
 }
 
-class _HomePageState extends State<HomePage>
-    with TickerProviderStateMixin<HomePage> {
+class _HomeContentPage extends StatefulWidget{
+
+  final HomeProvider provider;
+  _HomeContentPage(this.provider);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _HomePageState();
+  }
+}
+
+class _HomePageState extends State<_HomeContentPage>
+    with TickerProviderStateMixin<_HomeContentPage> {
   List<Key> _destinationKeys;
   List<AnimationController> _faders;
   AnimationController _hide;
-  int _currentIndex = 0;
+  HomeProvider mProvider;
+
   @override
   void initState() {
     super.initState();
 
+    mProvider = widget.provider;
     _faders =
         allDestinations.map<AnimationController>((Destination destination) {
       return AnimationController(
           vsync: this, duration: Duration(milliseconds: 200));
     }).toList();
-    _faders[_currentIndex].value = 1.0;
+    _faders[mProvider.currentIndex].value = 1.0;
     _destinationKeys =
         List<Key>.generate(allDestinations.length, (int index) => GlobalKey())
             .toList();
@@ -124,60 +143,62 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     return NotificationListener<ScrollNotification>(
       onNotification: _handleScrollNotification,
-      child: Scaffold(
-        body: SafeArea(
-          top: false,
-          child: Stack(
-            fit: StackFit.expand,
-            children: allDestinations.map((Destination destination) {
-              final Widget view = FadeTransition(
-                opacity: _faders[destination.index]
-                    .drive(CurveTween(curve: Curves.fastOutSlowIn)),
-                child: KeyedSubtree(
-                  key: _destinationKeys[destination.index],
-                  child: DestinationView(
-                    context,
-                    destination: destination,
-                    onNavigation: () {
-                      _hide.forward();
-                    },
-                  ),
-                ),
-              );
-              if (destination.index == _currentIndex) {
-                _faders[destination.index].forward();
-                return view;
-              } else {
-                _faders[destination.index].reverse();
-                if (_faders[destination.index].isAnimating) {
-                  return IgnorePointer(child: view);
-                }
-                return Offstage(child: view);
-              }
-            }).toList(),
-          ),
-        ),
-        bottomNavigationBar: ClipRect(
-          child: SizeTransition(
-            sizeFactor: _hide,
-            axisAlignment: -1.0,
-            child: BottomNavigationBar(
-              type: BottomNavigationBarType.shifting,
-              currentIndex: _currentIndex,
-              onTap: (int index) {
-                setState(() {
-                  _currentIndex = index;
-                });
-              },
-              items: allDestinations.map((Destination destination) {
-                return BottomNavigationBarItem(
-                    icon: Icon(destination.icon),
-                    backgroundColor: destination.color,
-                    title: Text(destination.title));
-              }).toList(),
+      child: Consumer<HomeProvider>(
+        builder: (context, value, child) {
+          return Scaffold(
+            body: SafeArea(
+              top: false,
+              child: Stack(
+                fit: StackFit.expand,
+                children: allDestinations.map((Destination destination) {
+                  final Widget view = FadeTransition(
+                    opacity: _faders[destination.index]
+                        .drive(CurveTween(curve: Curves.fastOutSlowIn)),
+                    child: KeyedSubtree(
+                      key: _destinationKeys[destination.index],
+                      child: DestinationView(
+                        context,
+                        destination: destination,
+                        onNavigation: () {
+                          _hide.forward();
+                        },
+                      ),
+                    ),
+                  );
+                  if (destination.index == value.currentIndex) {
+                    _faders[destination.index].forward();
+                    return view;
+                  } else {
+                    _faders[destination.index].reverse();
+                    if (_faders[destination.index].isAnimating) {
+                      return IgnorePointer(child: view);
+                    }
+                    return Offstage(child: view);
+                  }
+                }).toList(),
+              ),
             ),
-          ),
-        ),
+            bottomNavigationBar: ClipRect(
+              child: SizeTransition(
+                sizeFactor: _hide,
+                axisAlignment: -1.0,
+                child: BottomNavigationBar(
+                  type: BottomNavigationBarType.shifting,
+                  currentIndex: value.currentIndex,
+                  onTap: (int index) {
+                    value.currentIndex = index;
+                  },
+                  items: allDestinations.map((Destination destination) {
+                    return BottomNavigationBarItem(
+                        icon: Icon(destination.icon),
+                        backgroundColor: destination.color,
+                        title: Text(destination.title));
+                  }).toList(),
+                ),
+              ),
+            ),
+          );
+        }
       ),
     );
   }

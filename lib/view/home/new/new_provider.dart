@@ -7,15 +7,15 @@ import 'package:rxdart/rxdart.dart';
 class NewProvider extends BaseProvider {
   final GithubRepo _repo;
   bool _loading = false;
-  List<User> _response = [];
+  List<Shop> _response = [Shop(1,1,"title")];
 
   NewProvider(this._repo);
 
-  List<User> get response {
+  List<Shop> get response {
     print(_response.length.toString());
     return _response;
   }
-  set response(List<User> response) {
+  set response(List<Shop> response) {
     _response = response;
     notifyListeners();
   }
@@ -29,8 +29,7 @@ class NewProvider extends BaseProvider {
   Observable getUsers() => _repo
       .getUsers()
       .doOnData((r) {
-        print("data bao");
-          _response = (r as List).map((user) => User.fromJson(user)).toList();//.addAll((r as List).map((user) => User.fromJson(user)).toList());
+          _response.addAll((r as List).map((user) => Shop.fromJson(user)).toList());
   })
       .doOnError((e, stacktrace) {
         if (e is DioError) {

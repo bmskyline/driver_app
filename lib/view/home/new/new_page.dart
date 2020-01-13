@@ -1,8 +1,8 @@
 import 'package:driver_app/base/base.dart';
-import 'package:driver_app/data/model/user_model.dart';
 import 'package:driver_app/utils/widget_utils.dart';
 import 'package:driver_app/view/detail/detail_page.dart';
 import 'package:driver_app/view/home/new/new_provider.dart';
+import 'package:driver_app/view/scan/scan_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -58,9 +58,23 @@ class _NewContentState extends State<_NewContentPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("New"),
-        backgroundColor: Colors.blue,
-      ),
+          title: Text("New"),
+          backgroundColor: Colors.blue,
+          actions: <Widget>[
+            // action button
+            IconButton(
+              icon: Image.asset("assets/barcode.png"),
+              onPressed: () {
+                Navigator.push(
+                  homeContext,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ScanPage(),
+                  ),
+                );
+              },
+            )
+          ]),
       backgroundColor: Colors.black12,
       body: SizedBox.expand(
         child: NotificationListener<ScrollNotification>(
@@ -73,14 +87,15 @@ class _NewContentState extends State<_NewContentPage>
           },
           child:
               Stack(alignment: AlignmentDirectional.center, children: <Widget>[
-            Consumer<NewProvider> (
-              builder: (context, value, child) {
-                return ListView.builder(
-                  itemCount: value.response.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return SizedBox(
-                      child: Card(
-                        color: Colors.blue[50].withOpacity(0.25),
+            Consumer<NewProvider>(builder: (context, value, child) {
+              return ListView.builder(
+                itemCount: value.response.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return SizedBox(
+                    child: Card(
+                      color: Colors.blue[50].withOpacity(0.25),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
                         child: InkWell(
                           onTap: () {
                             Navigator.push(
@@ -91,25 +106,49 @@ class _NewContentState extends State<_NewContentPage>
                               ),
                             );
                           },
-                          child: Column(children: <Widget>[
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
                             Text(value.response[index].id.toString(),
-                                style: Theme
-                                    .of(context)
-                                    .primaryTextTheme
-                                    .body1),
-                            Text(value.response[index].title,
-                                style: Theme
-                                    .of(context)
-                                    .primaryTextTheme
-                                    .body1),
+                              style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.5),
+                            ),
+                            Row(
+                              children: <Widget>[
+                              Icon(Icons.phone),
+                                SizedBox(width: 16),
+                                Text(value.response[index].title,
+                                  style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.0)),
+                            ]),
+                            Row(
+                              children: <Widget>[
+                                Icon(Icons.phone),
+                                SizedBox(width: 16),
+                                Text(value.response[index].title,
+                                  style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.0),)
+                              ],),
+                            Row(
+                              children: <Widget>[
+                                Icon(Icons.phone),
+                                SizedBox(width: 16),
+                                Text(value.response[index].title,
+                                  style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.0),)
+                              ],),
+                                Row(
+                              children: <Widget>[
+                                Icon(Icons.phone),
+                                SizedBox(width: 16),
+                                Text(value.response[index].title,
+                                  style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.0),)
+                              ],)
+
                           ]),
                         ),
                       ),
-                    );
-                  },
-                );
-              }
-            ),
+                    ),
+                  );
+                },
+              );
+            }),
             buildProgress()
           ]),
         ),

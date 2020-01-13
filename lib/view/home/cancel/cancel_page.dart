@@ -35,7 +35,7 @@ class _CancelContentState extends State<_CancelContentPage>
   _CancelContentState(this.homeContext);
 
   CancelProvider mProvider;
-  List<User> users = List();
+  List<Shop> users = List();
 
   @override
   void initState() {
@@ -50,7 +50,7 @@ class _CancelContentState extends State<_CancelContentPage>
       //success
       setState(() {
         users
-            .addAll((data as List).map((user) => User.fromJson(user)).toList());
+            .addAll((data as List).map((user) => Shop.fromJson(user)).toList());
       });
     }, onError: (e) {
       //error
