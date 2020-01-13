@@ -12,14 +12,14 @@ const testScope = DartInScope('test');
 
 final viewModelModule = Module([
   factory<LoginProvider>(({params}) => LoginProvider(params.get(0), get())),
-  factory<NewProvider>(({params}) => NewProvider(get())),
-  factory<SuccessProvider>(({params}) => SuccessProvider(get())),
-  factory<CancelProvider>(({params}) => CancelProvider(get())),
+  lazy<NewProvider>(({params}) => NewProvider(get())),
+  lazy<SuccessProvider>(({params}) => SuccessProvider(get())),
+  lazy<CancelProvider>(({params}) => CancelProvider(get())),
   factory<HomeProvider>(({params}) => HomeProvider())
 ])
   ..addOthers(testScope, [
     ///other scope
-//  factory<HomeProvide>(({params}) => HomeProvide(params.get(0), get<GithubRepo>())),
+  //factory<HomeProvider>(({params}) => HomeProvider()),
   ]);
 
 final repoModule = Module([

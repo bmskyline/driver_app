@@ -7,12 +7,11 @@ import 'package:rxdart/rxdart.dart';
 class NewProvider extends BaseProvider {
   final GithubRepo _repo;
   bool _loading = false;
-  List<Shop> _response = [Shop(1,1,"title")];
+  List<Shop> _response = List();
 
   NewProvider(this._repo);
 
   List<Shop> get response {
-    print(_response.length.toString());
     return _response;
   }
   set response(List<Shop> response) {
